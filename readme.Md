@@ -35,6 +35,19 @@ You can control a relay connected to an ESP through MQTT messages.
 If an unrecognized command is received, ESP will send a list of available commands to the `espid/sender` topic.
 
 
+## **Relay Control Servo and Serial with Parallel Switch**
+
+A system that controls a relay and adds a simulated parallel switch using two ESP-01. One ESP controls the relay, and the other acts as a parallel switch with servo code.
+
+### **How to Use**:
+- **Main ESP (Relay Serial)**: Controls the relay and responds to commands **TURN_ON_RELAY**, **TURN_OFF_RELAY**, and **REVERSE_STATE**.
+- **Secondary ESP (Servo)**: Functions as a parallel switch, reversing the relay state on the Main ESP.
+
+### **Reason for Using GPIO 3 (RX)**:
+The ESP-01 device has only one available GPIO, and when restarted, it does not block initialization when closed, which is GPIO 3 (RX).
+
+
+
 
 
 

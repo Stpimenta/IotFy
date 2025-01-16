@@ -1,1 +1,0 @@
- /home/stpimenta/Desktop/Projects/IotFy/mobileApp/iotfy_app/.dart_tool/flutter_build/1eaf8bbb38fd5f01d9e4544b9fd94226/native_assets.yaml: 

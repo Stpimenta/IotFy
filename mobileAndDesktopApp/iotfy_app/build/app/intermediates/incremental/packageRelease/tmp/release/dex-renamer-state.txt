@@ -1,0 +1,4 @@
+#Wed Jan 15 13:51:49 BRT 2025
+base.0=/home/stpimenta/Desktop/Projects/IotFy/mobileApp/iotfy_app/build/app/intermediates/dex/release/minifyReleaseWithR8/classes.dex
+path.0=classes.dex
+renamed.0=classes.dex

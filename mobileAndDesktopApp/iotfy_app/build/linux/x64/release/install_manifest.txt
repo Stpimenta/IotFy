@@ -1,0 +1,13 @@
+/home/stpimenta/Desktop/Projects/IotFy/mobileApp/iotfy_app/build/linux/x64/release/bundle/iotfy_app
+/home/stpimenta/Desktop/Projects/IotFy/mobileApp/iotfy_app/build/linux/x64/release/bundle/data/icudtl.dat
+/home/stpimenta/Desktop/Projects/IotFy/mobileApp/iotfy_app/build/linux/x64/release/bundle/lib/libflutter_linux_gtk.so
+/home/stpimenta/Desktop/Projects/IotFy/mobileApp/iotfy_app/build/linux/x64/release/bundle/data/flutter_assets/AssetManifest.bin
+/home/stpimenta/Desktop/Projects/IotFy/mobileApp/iotfy_app/build/linux/x64/release/bundle/data/flutter_assets/assets/logo.png
+/home/stpimenta/Desktop/Projects/IotFy/mobileApp/iotfy_app/build/linux/x64/release/bundle/data/flutter_assets/AssetManifest.json
+/home/stpimenta/Desktop/Projects/IotFy/mobileApp/iotfy_app/build/linux/x64/release/bundle/data/flutter_assets/fonts/MaterialIcons-Regular.otf
+/home/stpimenta/Desktop/Projects/IotFy/mobileApp/iotfy_app/build/linux/x64/release/bundle/data/flutter_assets/packages/cupertino_icons/assets/CupertinoIcons.ttf
+/home/stpimenta/Desktop/Projects/IotFy/mobileApp/iotfy_app/build/linux/x64/release/bundle/data/flutter_assets/NOTICES.Z
+/home/stpimenta/Desktop/Projects/IotFy/mobileApp/iotfy_app/build/linux/x64/release/bundle/data/flutter_assets/version.json
+/home/stpimenta/Desktop/Projects/IotFy/mobileApp/iotfy_app/build/linux/x64/release/bundle/data/flutter_assets/shaders/ink_sparkle.frag
+/home/stpimenta/Desktop/Projects/IotFy/mobileApp/iotfy_app/build/linux/x64/release/bundle/data/flutter_assets/FontManifest.json
+/home/stpimenta/Desktop/Projects/IotFy/mobileApp/iotfy_app/build/linux/x64/release/bundle/lib/libapp.so

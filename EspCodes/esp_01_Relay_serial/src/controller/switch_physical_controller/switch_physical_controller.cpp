@@ -1,8 +1,9 @@
 #include "switch_physical_controller.h"
 
-SwitchPhysicalController::SwitchPhysicalController(SwitchPhysical* s1, relay_serial *relay) {
+SwitchPhysicalController::SwitchPhysicalController(SwitchPhysical* s1, relay_serial *relay, mqtt_protocols *mqttProtocols) {
   switch1 = s1;
   _relay = relay;
+  _mqttProtocols = mqttProtocols;
 }
 
 void SwitchPhysicalController::update() {
@@ -15,8 +16,10 @@ void SwitchPhysicalController::update() {
     // Toggle the relay state if any switch is toggled
     if (_relay->state) {
       _relay->turnOff();  // If the relay is on, turn it off
+      _mqttProtocols->publishMessage("TURN_OFF_RELAY");
     } else {
       _relay->turnOn();   // If the relay is off, turn it on
+      _mqttProtocols->publishMessage("TURN_ON_RELAY");
     }
   }
 

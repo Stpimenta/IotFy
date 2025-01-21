@@ -18,6 +18,9 @@ This project enables communication between ESP devices and Destop/Mobile. Each E
 - **Receiver Topic**: `espid/receiver` (ESP listens for messages here)
 - **Sender Topic**: `espid/sender` (ESP sends responses here)
 
+### **Unrecognized Command**:
+If an unrecognized command is received, ESP will send a list of available commands to the `espid/sender` topic.
+
 ---
 
 ## **Relay Control**
@@ -31,8 +34,6 @@ You can control a relay connected to an ESP through MQTT messages.
 - **RESTART_ESP**: ESP restarts, no message sent.
 - **STATE**: ESP sends `"true"` if relay is on or `"false"` if relay is off.
 
-### **Unrecognized Command**:
-If an unrecognized command is received, ESP will send a list of available commands to the `espid/sender` topic.
 
 
 ## **Relay Control Servo and Serial with Parallel Switch**
@@ -48,6 +49,39 @@ The ESP-01 device has only one available GPIO, and when restarted, it does not b
 
 
 
+# **IR Sender**
 
+You can send IR codes using MQTT messages.
+
+## **Commands to Send**:
+
+- **SEND_IR/{CODE}**: Sends an IR code in hexadecimal format. The ESP responds with:  
+  `"send ir code: {CODE}"`.
+
+# **LED STRIP CONTROL**
+
+You can control an LED strip connected to an ESP through MQTT messages.
+
+## **COMMANDS TO SEND:**
+
+- **ON**: Turns the LED strip on, and ESP sends `"ON"` back.
+- **OFF**: Turns the LED strip off, and ESP sends `"OFF"` back.
+- **SET_COLOR/{R}/{G}/{B}**: Set the LED strip color using RGB values. ESP sends `"Color set to R:{R} G:{G} B:{B}"` back.
+- **SET_BRIGHTNESS/{VALUE}**: Set the LED strip brightness. ESP sends `"Brightness set to {VALUE}"` back, where the value is between 0 and 255.
+- **RAINBOW**: Activates the rainbow effect on the LED strip, and ESP sends `"current effect: RAINBOW"` back.
+- **FADE**: Activates the fade effect on the LED strip, and ESP sends `"current effect: FADE"` back.
+- **SOLID_COLOR**: Activates the solid color effect on the LED strip, and ESP sends `"current effect: SOLID_COLOR"` back.
+- **STATE**: ESP sends the current state of the LED strip, including ON/OFF status, color, brightness, and velocity.
+- **WAVES**: Activates the waves effect on the LED strip, and ESP sends `"current effect: WAVES"` back.
+- **THEATERCHASE**: Activates the theater chase effect on the LED strip, and ESP sends `"current effect: THEATERCHASE"` back.
+- **COMET**: Activates the comet effect on the LED strip, and ESP sends `"current effect: COMET"` back.
+
+## **STATE DESCRIPTION:**
+
+The LED strip can be ON or OFF, and its color and brightness are adjustable.
+
+- **Color**: The available colors are defined by the RGB values, where each value is between 0 and 255.
+- **Brightness**: Adjustable between 0 (off) and 255 (maximum brightness).
+- **Velocity**: Controls the speed of effects like rainbow and fade. Velocity ranges from 0 to 255, where higher values represent faster transitions.
 
 

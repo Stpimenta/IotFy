@@ -69,7 +69,7 @@ void setup() {
     
     //setup controllers
     mqttController = new mqtt_controller(mqttClient,relay);
-    switchPhysicalController = new SwitchPhysicalController(s1,relay);
+    switchPhysicalController = new SwitchPhysicalController(s1,relay,mqttClient);
 
     // add tasks
     scheduler.addTask(mqttTask);

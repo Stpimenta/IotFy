@@ -3,6 +3,7 @@
 
 #include "./hardware/switch_physical/switch_physical.h"
 #include "./hardware/relay_serial/relay_serial.h"
+#include "protocols/mqtt_protocols.h"
 #include <Arduino.h>
 
 class SwitchPhysicalController {
@@ -10,8 +11,10 @@ class SwitchPhysicalController {
     SwitchPhysical* switch1;
     bool relayState;
     relay_serial * _relay;
+    mqtt_protocols * _mqttProtocols;
+
   public:
-    SwitchPhysicalController(SwitchPhysical* s1, relay_serial *relay);
+    SwitchPhysicalController(SwitchPhysical* s1, relay_serial *relay, mqtt_protocols *mqttProtocols);
     void update();
 };
 

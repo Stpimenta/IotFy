@@ -1,4 +1,4 @@
-import 'package:iotfy_app/services/client_mqtt_service.dart';
+import 'package:IotFy/services/client_mqtt_service.dart';
 
 class ControllerIrRemote {
   final MQTTService _mqttService;
@@ -8,6 +8,5 @@ class ControllerIrRemote {
 
   void sendIrCode(String espid, String code) {
     _mqttService.publishMessage(espid, 'ir/$code');
-    print('enviado: $code');
   }
 }

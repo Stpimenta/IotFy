@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_colorpicker/flutter_colorpicker.dart';
-
+import 'package:flutter_circle_color_picker/flutter_circle_color_picker.dart';
+import 'package:IotFy/screens/strip_led/controller/strip_led_controller.dart';
+import 'package:IotFy/services/client_mqtt_service.dart';
+import 'package:provider/provider.dart';
 
 class StripLedChangeColor extends StatefulWidget {
-  final  String espId;
+  final String espId;
   const StripLedChangeColor({super.key, required this.espId});
 
   @override
@@ -11,129 +13,93 @@ class StripLedChangeColor extends StatefulWidget {
 }
 
 class _StripLedChangeColorState extends State<StripLedChangeColor> {
-
- 
+  final CircleColorPickerController _controller = CircleColorPickerController();
   double sliderValue = 0;
   int brightnessValue = 0;
 
-  Color currentColor = Colors.black;
+  @override
+  void initState() {
+    super.initState();
+    final stripController = context.read<StripLedController>();
 
 
-  //modal and data picker
-
-  Widget buildColorPicker () => ColorPicker(
-    pickerColor: currentColor, 
-    onColorChanged: (color) {
-      setState(() {
-          currentColor  = color;
-          print(color);
-      });
-    },
-    enableAlpha: false,
-    displayThumbColor: false,
-  );
+    sliderValue = (stripController.stripState.brightness.value * 100) / 255;
+    brightnessValue = sliderValue.toInt();
 
 
-  void showDataPicker (BuildContext context)
-  {
-    showDialog(
-      context: context, 
-      builder: (BuildContext context){
-          return AlertDialog(
-            actions: [
-              // Align(
-              //   alignment: Alignment.topRight,
-              //   child: IconButton(
-              //     onPressed: (){
-              //       Navigator.of(context).pop();
-              //     }, 
-              //     icon:Icon(Icons.close, size: 30,), // Ou Icons.cancel
-                    
-              //   ),
-              // ),
-              buildColorPicker(),
-
-
-            
-            ],
-          );
-      }
+    _controller.color = Color.fromRGBO(
+      stripController.stripState.red.value,
+      stripController.stripState.green.value,
+      stripController.stripState.blue.value,
+      1.0,
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    return Consumer<StripLedController>(
+      builder: (context, stripController, child) {
+     
+        Color currentColor = Colors.white;
 
-    double screenWidth = MediaQuery.of(context).size.width;
- 
-
-    return 
-    Center(
+        return Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-
-              //show current strip color
-              ConstrainedBox(
-                constraints: BoxConstraints(
-                  maxWidth: 350,
-                  maxHeight: 350
-                ),
-
-
-                child: GestureDetector(
-                  onTap: () => showDataPicker(context),
-                  child: Container(
-                    height: screenWidth * 0.9,
-                    width: screenWidth * 0.9,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(300),
-                      color:currentColor
-                    ),
-                  ),
-                ),
+              CircleColorPicker(
+                controller: _controller,
+                onChanged: (color) {
+                  setState(() {
+                    currentColor = color;
+                  });
+                },
+                onEnded: (color) {
+                  int red = color.red;
+                  int green = color.green;
+                  int blue = color.blue;
+                  stripController.setColor(red, green, blue, widget.espId);
+                },
+                colorCodeBuilder: (context, color) {
+                  return const SizedBox();
+                },
               ),
-
-
-              //button show color picker
               Column(
                 children: [
                   SizedBox(
                     width: 300,
                     child: Column(
                       children: [
-                        Align(alignment: Alignment.topLeft, child: Text('brilho $brightnessValue%', style: TextStyle(fontSize: 20),)),
+                        Align(
+                          alignment: Alignment.topLeft,
+                          child: Text(
+                            'brilho $brightnessValue%',
+                            style: const TextStyle(fontSize: 20),
+                          ),
+                        ),
                         Slider(
                           min: 0,
-                          max:100,
-                          value: sliderValue, 
-                          onChanged: (value)  {
+                          max: 100,
+                          value: sliderValue,
+                          onChanged: (value) {
                             setState(() {
-                                sliderValue = value.ceilToDouble();
-                                brightnessValue = value.ceil();
+                              sliderValue = value;
+                              brightnessValue = value.toInt();
                             });
                           },
                           onChangeEnd: (value) {
-                              print(sliderValue);
+                            int valor255 = ((value * 255) / 100).toInt();
+                            stripController.setBrightness(valor255, widget.espId);
                           },
-
-                          
                         ),
-
-                        ElevatedButton(
-                          onPressed: (){
-                            showDataPicker(context);
-                          }, 
-        
-                          child: Text('change color', style: TextStyle(fontSize: 20),)
-                        )
                       ],
-                    )
+                    ),
                   ),
                 ],
               ),
             ],
-        ),
-    ); 
+          ),
+        );
+      },
+    );
   }
 }

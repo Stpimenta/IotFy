@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:iotfy_app/models/nav_to_projector_controller_model.dart';
-import 'package:iotfy_app/screens/ir_remote_controller/components/buttons/buttons_projector.dart';
-import 'package:iotfy_app/screens/ir_remote_controller/controller/controller_ir_remote.dart';
+import 'package:IotFy/models/nav_to_projector_controller_model.dart';
+import 'package:IotFy/screens/ir_remote_controller/components/buttons/buttons_projector.dart';
+import 'package:IotFy/screens/ir_remote_controller/controller/controller_ir_remote.dart';
 import 'package:provider/provider.dart';
 
 

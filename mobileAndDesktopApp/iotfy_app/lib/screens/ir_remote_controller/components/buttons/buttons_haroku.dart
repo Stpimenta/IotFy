@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:iotfy_app/models/remote_button_model.dart';
+import 'package:IotFy/models/remote_button_model.dart';
 
 
 class ButtonsHaroku {

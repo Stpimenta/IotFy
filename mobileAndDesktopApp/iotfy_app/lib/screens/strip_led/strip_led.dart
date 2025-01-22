@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:iotfy_app/models/nav_to_strip_led_model.dart';
-import 'package:iotfy_app/screens/strip_led/screens/strip_led_change_color.dart';
-import 'package:iotfy_app/screens/strip_led/screens/strip_led_effects.dart';
+import 'package:IotFy/models/nav_to_strip_led_model.dart';
+import 'package:IotFy/screens/strip_led/screens/strip_led_change_color.dart';
+import 'package:IotFy/screens/strip_led/screens/strip_led_effects.dart';
 
 class StripLed extends StatefulWidget {
   const StripLed({super.key});

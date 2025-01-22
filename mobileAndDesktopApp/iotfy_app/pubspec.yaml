@@ -1,4 +1,4 @@
-name: iotfy_app
+name: IotFy
 description: "A new Flutter project."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
@@ -39,6 +39,10 @@ dependencies:
   flutter_dotenv: ^5.2.1
   flutter_svg: ^2.0.17
   flutter_colorpicker: ^1.1.0
+  flutter_circle_color_picker: ^0.3.0
+  flutter_launcher_icons: ^0.9.2
+
+
 
 dev_dependencies:
   flutter_test:
@@ -67,6 +71,18 @@ flutter:
     - assets/logo.png
     - assets/icons/
     - .env
+
+
+
+flutter_icons:
+  flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  min_sdk_android: 16
+  remove_alpha_ios: true
+  image_path: "assets/images/icon.png"
+  adaptive_icon_background: "assets/images/iconfundo.png"
+  adaptive_icon_foreground: "assets/images/icon.png"
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:iotfy_app/models/nav_to_projector_controller_model.dart';
-import 'package:iotfy_app/screens/ir_remote_controller/components/controllers_remote_view/haroku_controller%20copy.dart';
-import 'package:iotfy_app/screens/ir_remote_controller/components/controllers_remote_view/projector_controller.dart';
+import 'package:IotFy/models/nav_to_projector_controller_model.dart';
+import 'package:IotFy/screens/ir_remote_controller/components/controllers_remote_view/haroku_controller%20copy.dart';
+import 'package:IotFy/screens/ir_remote_controller/components/controllers_remote_view/projector_controller.dart';
 
 
 class IrRemote extends StatelessWidget {

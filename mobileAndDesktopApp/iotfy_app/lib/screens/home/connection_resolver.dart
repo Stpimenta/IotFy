@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:iotfy_app/screens/home/home_screen.dart';
-import 'package:iotfy_app/screens/home/loading.dart';
-import 'package:iotfy_app/services/client_mqtt_service.dart';
+import 'package:IotFy/screens/home/home_screen.dart';
+import 'package:IotFy/screens/home/loading.dart';
+import 'package:IotFy/services/client_mqtt_service.dart';
 import 'package:provider/provider.dart';
 
 class ConnectionResolver extends StatelessWidget {

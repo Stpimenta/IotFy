@@ -1,4 +1,4 @@
-package com.example.iotfy_app
+package com.example.IotFy
 
 import io.flutter.embedding.android.FlutterActivity
 

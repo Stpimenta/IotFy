@@ -3,8 +3,8 @@
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
-import 'package:iotfy_app/screens/ir_remote_controller/components/buttons/buttons_haroku.dart';
-import 'package:iotfy_app/screens/ir_remote_controller/controller/controller_ir_remote.dart';
+import 'package:IotFy/screens/ir_remote_controller/components/buttons/buttons_haroku.dart';
+import 'package:IotFy/screens/ir_remote_controller/controller/controller_ir_remote.dart';
 import 'package:provider/provider.dart';
 
 class HarokuController extends StatelessWidget {

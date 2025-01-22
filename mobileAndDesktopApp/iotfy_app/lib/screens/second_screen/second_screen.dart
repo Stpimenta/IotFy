@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:iotfy_app/screens/widgets_components/relay_card.dart';
+import 'package:IotFy/screens/widgets_components/relay_card.dart';
 
 class SecondScreen extends StatefulWidget {
   const SecondScreen({super.key});

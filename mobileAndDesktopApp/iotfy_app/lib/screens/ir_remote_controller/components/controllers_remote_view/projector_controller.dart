@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:iotfy_app/screens/ir_remote_controller/components/buttons/buttons_projector.dart';
-import 'package:iotfy_app/screens/ir_remote_controller/controller/controller_ir_remote.dart';
+import 'package:IotFy/screens/ir_remote_controller/components/buttons/buttons_projector.dart';
+import 'package:IotFy/screens/ir_remote_controller/controller/controller_ir_remote.dart';
 import 'package:provider/provider.dart';
 
 class ProjectorController extends StatelessWidget {

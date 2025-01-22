@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:iotfy_app/screens/home/widgets_components/reconnect_modal.dart';
-import 'package:iotfy_app/services/client_mqtt_service.dart';
+import 'package:IotFy/screens/home/widgets_components/reconnect_modal.dart';
+import 'package:IotFy/services/client_mqtt_service.dart';
 import 'package:provider/provider.dart';
 
 class Loading extends StatelessWidget {

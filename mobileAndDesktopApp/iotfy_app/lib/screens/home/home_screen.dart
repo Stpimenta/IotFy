@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:iotfy_app/screens/widgets_components/projector_controller_card.dart';
-import 'package:iotfy_app/screens/widgets_components/relay_card.dart';
-import 'package:iotfy_app/screens/widgets_components/strip_led_card.dart';
+import 'package:IotFy/screens/widgets_components/projector_controller_card.dart';
+import 'package:IotFy/screens/widgets_components/relay_card%20_pulse.dart';
+import 'package:IotFy/screens/widgets_components/relay_card.dart';
+import 'package:IotFy/screens/widgets_components/strip_led_card.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -69,6 +70,14 @@ class _SeconHomeScreen extends State<HomeScreen> {
                 child: ListView(
                   children: 
                   [
+                     Align(
+                        alignment: Alignment.center,
+                        child: Container(
+                          margin: const EdgeInsets.only(top: 8.0),
+                          child: RelayCardPulse(espId: 'esp01_power_pc', title: 'My Pc'),
+                        ),
+                      ),
+
                       Align(
                         alignment: Alignment.center,
                         child: Container(
@@ -98,7 +107,7 @@ class _SeconHomeScreen extends State<HomeScreen> {
                         child: Container(
                           margin: const EdgeInsets.only(top: 8.0),
                           child: ProjectorControllerCard(
-                            espId: 'boa',
+                            espId: 'esp01_ir',
                             title: 'controle projetor',
                             type: 'projector',
                           ),
@@ -110,7 +119,7 @@ class _SeconHomeScreen extends State<HomeScreen> {
                         child: Container(
                           margin: const EdgeInsets.only(top: 8.0),
                           child: ProjectorControllerCard(
-                            espId: 'boaa',
+                            espId: 'esp01_ir',
                             title: 'controle haroku',
                             type: 'haroku',
                           ),
@@ -121,7 +130,15 @@ class _SeconHomeScreen extends State<HomeScreen> {
                         alignment: Alignment.center,
                         child: Container(
                           margin: const EdgeInsets.only(top: 8.0),
-                          child: StripLedCard(espId: 'boaaa', title: 'fita led'),
+                          child: StripLedCard(espId: 'esp01_led_strip', title: 'fita led'),
+                        ),
+                      ),
+
+                      Align(
+                        alignment: Alignment.center,
+                        child: Container(
+                          height: 100,
+                          margin: const EdgeInsets.only(top: 8.0),
                         ),
                       ),
                   ]

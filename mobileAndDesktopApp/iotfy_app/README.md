@@ -1,4 +1,4 @@
-# iotfy_app
+# IotFy
 
 A new Flutter project.
 

@@ -190,9 +190,14 @@ void strip_led_hardware::comet() {
 
 
 void strip_led_hardware::turnOn() {
-  isOn = true;            
-  setColor(0, 0, 255);    
-  setEffect(SOLID_COLOR);      
+
+  isOn = true; 
+  if(red == 0 && blue == 0 && green == 0)
+  {
+      setColor(0, 0, 255);    
+      setEffect(SOLID_COLOR); 
+  }           
+     
 }
 
 

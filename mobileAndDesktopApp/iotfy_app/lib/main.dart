@@ -14,7 +14,6 @@ import 'package:provider/provider.dart';
 
 void main() async{
   await dotenv.load(); // Carrega o arquivo .env
-
   runApp(
     MultiProvider(
       providers: [

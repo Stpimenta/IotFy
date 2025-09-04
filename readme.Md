@@ -1,87 +1,145 @@
-# Introdução
-Agora um pouco mais maduro como desenvolvedor estou reconstruindo o meu projeto anterior HomeYX, agora rebatizado de "iotFy".
-O projeto tem como objetivo dar continuidade aos meus estudos sobre programção e aproveitar para deixar minha casa mais moderna e integrada gastando pouco.
+# 🌐 iotFy  
 
+## 📖 Introdução  
 
-# Setup
-- broker MQTT
-- ESPs
-- devices with relays led strip...
-
-
-# MQTT Communication with ESPs
-
-This project enables communication between ESP devices and Destop/Mobile. Each ESP has a unique ID (`espid`) and communicates via specific topics.
-
-## **MQTT Topics**
-
-- **Receiver Topic**: `espid/receiver` (ESP listens for messages here)
-- **Sender Topic**: `espid/sender` (ESP sends responses here)
-
-### **Unrecognized Command**:
-If an unrecognized command is received, ESP will send a list of available commands to the `espid/sender` topic.
+Agora mais maduro como desenvolvedor, estou reconstruindo meu antigo projeto **HomeYX**, agora chamado **iotFy**.  
+O objetivo é continuar aprendendo programação enquanto modernizo minha casa de forma simples e econômica.  
 
 ---
 
-## **Relay Control**
+## ⚙️ Setup  
 
-You can control a relay connected to an ESP through MQTT messages.
+- Broker **MQTT**  
+- Microcontroladores **ESP**  
+- Dispositivos: relés, fitas de LED, emissor IR...  
 
-### **Commands to Send**:
-- **TURN_ON_RELAY**: Relay turns on, and ESP sends `"TURN_ON_RELAY"` back.
-- **TURN_OFF_RELAY**: Relay turns off, and ESP sends `"TURN_OFF_RELAY"` back.
-- **PULSE/{MS}**: Relay Pulse for x milissecond, and ESP sends `"{x} MS PULSE"` back.
-- **RESTART_ESP**: ESP restarts, no message sent.
-- **STATE**: ESP sends `"true"` if relay is on or `"false"` if relay is off.
+---
 
+## 📡 Comunicação MQTT com ESPs  
 
+Cada ESP possui um **ID único** (`espid`) e se comunica por tópicos MQTT:  
 
-## **Relay Control Servo and Serial with Parallel Switch**
+- **Receiver Topic**: `espid/receiver` → ESP recebe comandos  
+- **Sender Topic**: `espid/sender` → ESP envia respostas  
 
-A system that controls a relay and adds a simulated parallel switch using two ESP-01. One ESP controls the relay, and the other acts as a parallel switch with servo code.
+**Comando não reconhecido**  
+Se o ESP receber algo inválido, ele responde com a lista de comandos disponíveis.  
 
-### **How to Use**:
-- **Main ESP (Relay Serial)**: Controls the relay and responds to commands **TURN_ON_RELAY**, **TURN_OFF_RELAY**, and **REVERSE_STATE**.
-- **Secondary ESP (Servo)**: Functions as a parallel switch, reversing the relay state on the Main ESP.
+---
 
-### **Reason for Using GPIO 3 (RX)**:
-The ESP-01 device has only one available GPIO, and when restarted, it does not block initialization when closed, which is GPIO 3 (RX).
+## 🔌 Controle de Relé  
 
+**Comandos**:  
+- `TURN_ON_RELAY` → Liga o relé  
+- `TURN_OFF_RELAY` → Desliga o relé  
+- `PULSE/{MS}` → Pulso de X ms  
+- `RESTART_ESP` → Reinicia ESP  
+- `STATE` → Retorna `true/false`  
 
+---
 
-# **IR Sender**
+## 🔄 Relé + Servo (Interruptor Paralelo)  
 
-You can send IR codes using MQTT messages.
+Dois ESP-01 simulam um interruptor paralelo:  
 
-## **Commands to Send**:
+- **Main ESP (Relay Serial)** → Liga/desliga e responde a comandos.  
+- **Secondary ESP (Servo)** → Age como interruptor paralelo.  
 
-- **SEND_IR/{CODE}**: Sends an IR code in hexadecimal format. The ESP responds with:  
-  `"send ir code: {CODE}"`.
+**GPIO 3 (RX)** é usado por limitação do ESP-01.  
 
-# **LED STRIP CONTROL**
+---
 
-You can control an LED strip connected to an ESP through MQTT messages.
+## 📡 Emissor IR  
 
-## **COMMANDS TO SEND:**
+**Comando**:  
+- `SEND_IR/{CODE}` → Envia código IR em HEX  
 
-- **ON**: Turns the LED strip on, and ESP sends `"ON"` back.
-- **OFF**: Turns the LED strip off, and ESP sends `"OFF"` back.
-- **SET_COLOR/{R}/{G}/{B}**: Set the LED strip color using RGB values. ESP sends `"Color set to R:{R} G:{G} B:{B}"` back.
-- **SET_BRIGHTNESS/{VALUE}**: Set the LED strip brightness. ESP sends `"Brightness set to {VALUE}"` back, where the value is between 0 and 255.
-- **RAINBOW**: Activates the rainbow effect on the LED strip, and ESP sends `"current effect: RAINBOW"` back.
-- **FADE**: Activates the fade effect on the LED strip, and ESP sends `"current effect: FADE"` back.
-- **SOLID_COLOR**: Activates the solid color effect on the LED strip, and ESP sends `"current effect: SOLID_COLOR"` back.
-- **STATE**: ESP sends the current state of the LED strip, including ON/OFF status, color, brightness, and velocity.
-- **WAVES**: Activates the waves effect on the LED strip, and ESP sends `"current effect: WAVES"` back.
-- **THEATERCHASE**: Activates the theater chase effect on the LED strip, and ESP sends `"current effect: THEATERCHASE"` back.
-- **COMET**: Activates the comet effect on the LED strip, and ESP sends `"current effect: COMET"` back.
+---
 
-## **STATE DESCRIPTION:**
+## 💡 Controle de Fita LED  
 
-The LED strip can be ON or OFF, and its color and brightness are adjustable.
+**Comandos**:  
+- `ON` / `OFF` → Liga/Desliga  
+- `SET_COLOR/{R}/{G}/{B}` → Define cor RGB  
+- `SET_BRIGHTNESS/{VALUE}` → Ajusta brilho (0–255)  
+- `FADE`, `SOLID_COLOR`, `WAVES`, `THEATERCHASE`, `COMET` → Efeitos visuais  
+- `STATE` → Retorna estado atual (ON/OFF, cor, brilho, efeito, velocidade)  
 
-- **Color**: The available colors are defined by the RGB values, where each value is between 0 and 255.
-- **Brightness**: Adjustable between 0 (off) and 255 (maximum brightness).
-- **Velocity**: Controls the speed of effects like rainbow and fade. Velocity ranges from 0 to 255, where higher values represent faster transitions.
+**Parâmetros**  
+- **Cor** → RGB (0–255)  
+- **Brilho** → 0 a 255  
+- **Velocidade** → 0 a 255 (quanto maior, mais rápido)  
 
+---
 
+# 🌐 iotFy  
+
+## 📖 Introduction  
+
+Now, as a more mature developer, I’m rebuilding my old project **HomeYX**, rebranded as **iotFy**.  
+The goal is to keep learning programming while making my home smarter, integrated, and affordable.  
+
+---
+
+## ⚙️ Setup  
+
+- **MQTT** broker  
+- **ESP** microcontrollers  
+- Devices: relays, LED strips, IR sender...  
+
+---
+
+## 📡 MQTT Communication with ESPs  
+
+Each ESP has a **unique ID** (`espid`) and communicates via MQTT topics:  
+
+- **Receiver Topic**: `espid/receiver` → ESP receives commands  
+- **Sender Topic**: `espid/sender` → ESP sends responses  
+
+**Unrecognized Command**  
+If the ESP receives something invalid, it replies with the list of available commands.  
+
+---
+
+## 🔌 Relay Control  
+
+**Commands**:  
+- `TURN_ON_RELAY` → Turns relay ON  
+- `TURN_OFF_RELAY` → Turns relay OFF  
+- `PULSE/{MS}` → Pulse X ms  
+- `RESTART_ESP` → Restart ESP  
+- `STATE` → Returns `true/false`  
+
+---
+
+## 🔄 Relay + Servo (Parallel Switch)  
+
+Two ESP-01 simulate a parallel switch:  
+
+- **Main ESP (Relay Serial)** → Controls the relay and responds to commands.  
+- **Secondary ESP (Servo)** → Works as a parallel switch.  
+
+**GPIO 3 (RX)** is used due to ESP-01 limitation.  
+
+---
+
+## 📡 IR Sender  
+
+**Command**:  
+- `SEND_IR/{CODE}` → Sends IR code in HEX  
+
+---
+
+## 💡 LED Strip Control  
+
+**Commands**:  
+- `ON` / `OFF` → Turns ON/OFF  
+- `SET_COLOR/{R}/{G}/{B}` → Set RGB color  
+- `SET_BRIGHTNESS/{VALUE}` → Set brightness (0–255)  
+- `FADE`, `SOLID_COLOR`, `WAVES`, `THEATERCHASE`, `COMET` → Visual effects  
+- `STATE` → Returns current state (ON/OFF, color, brightness, effect, speed)  
+
+**Parameters**  
+- **Color** → RGB (0–255)  
+- **Brightness** → 0 to 255  
+- **Velocity** → 0 to 255 (higher = faster)  

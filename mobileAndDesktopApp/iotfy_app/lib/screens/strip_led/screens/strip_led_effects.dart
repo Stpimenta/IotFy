@@ -5,53 +5,133 @@ import 'package:IotFy/screens/strip_led/components/strip_led_effects_list.dart';
 
 class StripLedEffects extends StatefulWidget {
   final String espId;
-  const StripLedEffects({super.key, required this.espId});
+
+  const StripLedEffects({
+    super.key,
+    required this.espId,
+  });
 
   @override
-  StripLedEffectsState createState() => StripLedEffectsState();
+  StripLedEffectsState createState() =>
+      StripLedEffectsState();
 }
 
-class StripLedEffectsState extends State<StripLedEffects> {
+class StripLedEffectsState
+    extends State<StripLedEffects> {
+
   double brightSliderValue = 0;
   double velocitSliderValue = 0;
+
   int brightSValue = 0;
   int velocitValue = 0;
 
   @override
   void initState() {
     super.initState();
-    final stripController = context.read<StripLedController>();
 
-    // Inicializando os sliders com os valores do controlador
-    brightSliderValue = (stripController.stripState.brightness.value * 100) / 255;
-    velocitSliderValue = (stripController.stripState.velocity.value * 100) / 255;
-    brightSValue = brightSliderValue.toInt();
-    velocitValue = velocitSliderValue.toInt();
+    final stripController =
+        context.read<StripLedController>();
+
+    brightSliderValue =
+        stripController
+            .stripState
+            .brightness
+            .value
+            .toDouble();
+
+    velocitSliderValue =
+        stripController
+            .stripState
+            .velocity
+            .value
+            .toDouble();
+
+    brightSValue =
+        brightSliderValue.toInt();
+
+    velocitValue =
+        velocitSliderValue.toInt();
   }
 
   @override
   Widget build(BuildContext context) {
-    final stripLedEffectsList = effectsLedList;
+
+    final stripLedEffectsList =
+        effectsLedList;
 
     return Consumer<StripLedController>(
-      builder: (context, stripController, child) {
+      builder:
+          (context, stripController, child) {
+
+        brightSliderValue =
+            stripController
+                .stripState
+                .brightness
+                .value
+                .toDouble();
+
+        velocitSliderValue =
+            stripController
+                .stripState
+                .velocity
+                .value
+                .toDouble();
+
+        brightSValue =
+            brightSliderValue.toInt();
+
+        velocitValue =
+            velocitSliderValue.toInt();
+
         return Column(
           children: [
+
+            // =========================================
+            // EFFECTS
+            // =========================================
+
             SizedBox(
-              height: MediaQuery.of(context).size.height * 0.6,
+              height:
+                  MediaQuery.of(context)
+                          .size
+                          .height *
+                      0.6,
+
               child: ListView(
                 children: List.generate(
                   stripLedEffectsList.length,
+
                   (index) {
+
                     return Align(
-                      alignment: Alignment.center,
+                      alignment:
+                          Alignment.center,
+
                       child: Container(
-                        margin: const EdgeInsets.only(top: 15),
+                        margin:
+                            const EdgeInsets.only(
+                          top: 15,
+                        ),
+
                         child: ElevatedButton(
+
                           onPressed: () {
-                            stripController.setEffect(stripLedEffectsList[index].code,widget.espId);
+
+                            stripController
+                                .mqttService
+                                .publishMessage(
+
+                              widget.espId,
+
+                              stripLedEffectsList[index]
+                                  .code,
+                            );
                           },
-                          child: Text(stripLedEffectsList[index].name),
+
+                          child: Text(
+                            stripLedEffectsList[index]
+                                .name,
+                          ),
                         ),
                       ),
                     );
@@ -59,51 +139,113 @@ class StripLedEffectsState extends State<StripLedEffects> {
                 ),
               ),
             ),
+
+            // =========================================
+            // SLIDERS
+            // =========================================
+
             SizedBox(
               width: 300,
+
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
+                crossAxisAlignment:
+                    CrossAxisAlignment.center,
+
                 children: [
-                  // Controle de Brilho
+
+                  // =====================================
+                  // BRIGHTNESS
+                  // =====================================
+
                   Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment:
+                        CrossAxisAlignment.start,
+
                     children: [
-                      Text('Brilho $brightSValue%', style: TextStyle(fontSize: 20)),
+
+                      Text(
+                        'Brilho $brightSValue%',
+
+                        style: const TextStyle(
+                          fontSize: 20,
+                        ),
+                      ),
+
                       Slider(
                         min: 0,
                         max: 100,
-                        value: brightSliderValue,
+
+                        value:
+                            brightSliderValue,
+
                         onChanged: (value) {
+
                           setState(() {
-                            brightSliderValue = value;
-                            brightSValue = value.toInt();
+
+                            brightSliderValue =
+                                value;
+
+                            brightSValue =
+                                value.toInt();
                           });
                         },
+
                         onChangeEnd: (value) {
-                          int valor255 = ((value * 255) / 100).toInt();
-                          stripController.setBrightness(valor255, widget.espId);
+
+                          stripController
+                              .setBrightness(
+                            value.toInt(),
+                            widget.espId,
+                          );
                         },
                       ),
                     ],
                   ),
-                  // Controle de Velocidade
+
+                  // =====================================
+                  // VELOCITY
+                  // =====================================
+
                   Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment:
+                        CrossAxisAlignment.start,
+
                     children: [
-                      Text('Velocidade $velocitValue%', style: TextStyle(fontSize: 20)),
+
+                      Text(
+                        'Velocidade $velocitValue%',
+
+                        style: const TextStyle(
+                          fontSize: 20,
+                        ),
+                      ),
+
                       Slider(
                         min: 0,
                         max: 100,
-                        value: velocitSliderValue,
+
+                        value:
+                            velocitSliderValue,
+
                         onChanged: (value) {
+
                           setState(() {
-                            velocitSliderValue = value;
-                            velocitValue = value.toInt();
+
+                            velocitSliderValue =
+                                value;
+
+                            velocitValue =
+                                value.toInt();
                           });
                         },
+
                         onChangeEnd: (value) {
-                          int valor255 = ((value * 255) / 100).toInt();
-                          stripController.setVelocity(valor255, widget.espId);
+
+                          stripController
+                              .setVelocity(
+                            value.toInt(),
+                            widget.espId,
+                          );
                         },
                       ),
                     ],

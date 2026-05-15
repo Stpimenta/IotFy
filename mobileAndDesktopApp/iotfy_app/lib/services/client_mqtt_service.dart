@@ -1,25 +1,21 @@
-
 import 'package:flutter/material.dart';
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
 // import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class MQTTService extends ChangeNotifier {
-
   late MqttServerClient client;
   late String broker;
   final String clientId = DateTime.now().toString();
-  final Map<String, Function(String)> _listeners = {}; // Topic Manager
+  final Map<String, List<Function(String)>> _listeners = {}; // Topic Manager
   ValueNotifier<bool> isConnected = ValueNotifier(false);
   ValueNotifier<bool> maxReconnectAttempsNot = ValueNotifier(false);
   int _reconnectAttemps = 0;
   final int _maxReconnectAttemps = 3;
 
-  MQTTService (String urlBroker)
-  {
-     broker = urlBroker;
+  MQTTService(String urlBroker) {
+    broker = urlBroker;
   }
-
 
   // Initializes the MQTT connection and message listening
   Future<void> initialize() async {
@@ -44,116 +40,108 @@ class MQTTService extends ChangeNotifier {
 
     client.connectionMessage = connMessage;
 
-    try 
-    {
+    try {
       // print('Connecting to MQTT broker...');
       await client.connect();
-    } 
-    
-    catch (e) 
-    {
+    } catch (e) {
       // print('Error: $e');
       client.disconnect();
     }
-
   }
 
   // Callback functions
   void onConnected() {
     //print('Connected to broker');
     isConnected.value = true;
-    notifyListeners(); 
+    notifyListeners();
     _listenToMessages();
   }
 
   void onDisconnected() {
     isConnected.value = false;
-    notifyListeners(); 
+    notifyListeners();
     _toReconnect();
   }
 
   // Subscribe to a specific topic and register a callback function
   void subscribeToTopic(String espid, Function(String) callback) {
-    client.subscribe('$espid/sender', MqttQos.atMostOnce);
     String topic = '$espid/sender';
-    _listeners[topic] = callback;
 
+    client.subscribe(topic, MqttQos.atMostOnce);
+
+    if (!_listeners.containsKey(topic)) {
+      _listeners[topic] = [];
+    }
+
+    _listeners[topic]!.add(callback);
   }
 
   // Listen to received messages and notify listeners
   void _listenToMessages() {
-
     client.updates?.listen((List<MqttReceivedMessage<MqttMessage>>? updates) {
       for (var update in updates!) {
         final topic = update.topic;
         final recMessage = update.payload as MqttPublishMessage;
-        final message = MqttPublishPayload.bytesToStringAsString(recMessage.payload.message);
+        final message = MqttPublishPayload.bytesToStringAsString(
+            recMessage.payload.message);
         //print('Message received on topic $topic: $message');
-        
+
         //callback
         _callBackListeners(topic, message);
       }
     });
   }
 
-  //notify listeners 
+  //notify listeners
   void _callBackListeners(String topic, String message) {
-    
-    final callback = _listeners[topic];
-    callback?.call(message); // Chama a função associada ao tópico
-    
+    final callbacks = _listeners[topic];
+
+    if (callbacks == null) return;
+
+    for (final callback in callbacks) {
+      callback(message);
+    }
   }
 
-  // Remove listeners 
+  // Remove listeners
   void removeListenersForTopic(String topic) {
     _listeners.remove('$topic/sender');
     //print('Listeners removed for topic: $topic');
   }
 
-
-  void publishMessage(String espid, String message)
-  {
+  void publishMessage(String espid, String message) {
     if (client.connectionStatus?.state == MqttConnectionState.connected) {
       final builder = MqttClientPayloadBuilder();
       builder.addString(message);
 
       // Envia a mensagem com QOS 1 (ensuring delivery)
-      client.publishMessage('$espid/reciver', MqttQos.atMostOnce, builder.payload!);
+      client.publishMessage(
+          '$espid/reciver', MqttQos.atMostOnce, builder.payload!);
       //print('Message sent to topic: $espid/reciver');
-    } 
+    }
   }
 
-  Future <void> _toReconnect () async
-  {
-     _reconnectAttemps ++;
+  Future<void> _toReconnect() async {
+    _reconnectAttemps++;
 
-     if(_reconnectAttemps >= _maxReconnectAttemps)
-     {
-        maxReconnectAttempsNot.value = true;
-        notifyListeners();
-        return;
-     }
-
-     else
-     {
-        await Future.delayed(Duration(seconds: 5));
-        connect();
-        return;
-     }
+    if (_reconnectAttemps >= _maxReconnectAttemps) {
+      maxReconnectAttempsNot.value = true;
+      notifyListeners();
+      return;
+    } else {
+      await Future.delayed(Duration(seconds: 5));
+      connect();
+      return;
+    }
   }
-
 
   //try reconect again
-  void resetAttempConnect()
-  {
-     _reconnectAttemps = 0;
-     maxReconnectAttempsNot.value = false;
-     notifyListeners();
+  void resetAttempConnect() {
+    _reconnectAttemps = 0;
+    maxReconnectAttempsNot.value = false;
+    notifyListeners();
   }
-
 }
-
-
 
 // Example usage (uncomment for testing)
 // void main() async {

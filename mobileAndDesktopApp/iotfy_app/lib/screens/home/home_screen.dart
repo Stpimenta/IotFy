@@ -3,6 +3,7 @@ import 'package:IotFy/screens/widgets_components/projector_controller_card.dart'
 import 'package:IotFy/screens/widgets_components/relay_card%20_pulse.dart';
 import 'package:IotFy/screens/widgets_components/relay_card.dart';
 import 'package:IotFy/screens/widgets_components/strip_led_card.dart';
+import 'package:IotFy/screens/widgets_components/ligth_card.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -82,7 +83,15 @@ class _SeconHomeScreen extends State<HomeScreen> {
                         alignment: Alignment.center,
                         child: Container(
                           margin: const EdgeInsets.only(top: 8.0),
-                          child: RelayCard(espId: 'esp01_luz_quarto', title: 'luz quarto'),
+                          child: LightCard(espId: 'esp32-c3-ctrl-bedroom',title: 'Luz Q. Central',lightNumber: 1,),
+                        ),
+                      ),
+
+                      Align(
+                        alignment: Alignment.center,
+                        child: Container(
+                          margin: const EdgeInsets.only(top: 8.0),
+                          child: LightCard(espId: 'esp32-c3-ctrl-bedroom',title: 'Luz Q. Spot',lightNumber: 2,),
                         ),
                       ),
                       
@@ -90,7 +99,7 @@ class _SeconHomeScreen extends State<HomeScreen> {
                         alignment: Alignment.center,
                         child: Container(
                           margin: const EdgeInsets.only(top: 8.0),
-                          child: RelayCard(espId: 'esp01_luz_banheiro', title: 'luz banheiro'),
+                          child: RelayCard(espId: 'esp01_luz_banheiro', title: 'Luz B. Central'),
                         ),
                       ),
                       
@@ -98,7 +107,7 @@ class _SeconHomeScreen extends State<HomeScreen> {
                         alignment: Alignment.center,
                         child: Container(
                           margin: const EdgeInsets.only(top: 8.0),
-                          child: RelayCard(espId: 'esp01_luz_banheiro_descanso', title: 'mini luz'),
+                          child: RelayCard(espId: 'esp01_luz_banheiro_descanso', title: 'Luz B. Spot'),
                         ),
                       ),
                       
@@ -108,7 +117,7 @@ class _SeconHomeScreen extends State<HomeScreen> {
                           margin: const EdgeInsets.only(top: 8.0),
                           child: ProjectorControllerCard(
                             espId: 'esp01_ir',
-                            title: 'controle projetor',
+                            title: 'Controle Projetor',
                             type: 'projector',
                           ),
                         ),
@@ -120,7 +129,7 @@ class _SeconHomeScreen extends State<HomeScreen> {
                           margin: const EdgeInsets.only(top: 8.0),
                           child: ProjectorControllerCard(
                             espId: 'esp01_ir',
-                            title: 'controle haroku',
+                            title: 'Controle Haroku',
                             type: 'haroku',
                           ),
                         ),
@@ -130,7 +139,7 @@ class _SeconHomeScreen extends State<HomeScreen> {
                         alignment: Alignment.center,
                         child: Container(
                           margin: const EdgeInsets.only(top: 8.0),
-                          child: StripLedCard(espId: 'esp01_led_strip', title: 'fita led'),
+                          child: StripLedCard(espId: 'esp32-c3-ctrl-bedroom', title: 'Fita Led'),
                         ),
                       ),
 

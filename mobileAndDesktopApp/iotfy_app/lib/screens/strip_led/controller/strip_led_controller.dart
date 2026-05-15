@@ -4,134 +4,300 @@ import 'package:IotFy/services/client_mqtt_service.dart';
 
 class StripLedController extends ChangeNotifier {
   final MQTTService mqttService;
+
   late StripStateModel stripState;
 
-  StripLedController({required this.mqttService}) {
+  StripLedController({
+    required this.mqttService,
+  }) {
     stripState = StripStateModel(
-      red: 0,
-      green: 0,
-      blue: 0,
+      red: 255,
+      green: 255,
+      blue: 255,
       brightness: 0,
-      velocity: 0,
-      isSolid: false,
+      velocity: 50,
+      isSolid: true,
       isOn: false,
     );
   }
 
-  void setColor(int red, int green, int blue, String espId) {
-    mqttService.publishMessage(espId, "set_color/$red/$green/$blue");
-    stripState.red.value = red;
-    stripState.green.value = green;
-    stripState.blue.value = blue;
-    notifyListeners(); // Notifica mudanças nas cores
-  }
-
-  void setBrightness(int brightness, String espId) {
-    mqttService.publishMessage(espId, "set_brightness/$brightness");
-    stripState.brightness.value = brightness;
-    notifyListeners(); // Notifica mudanças no brilho
-  }
-
-  void setVelocity(int velocity, String espId) {
-    mqttService.publishMessage(espId, "set_velocity/$velocity");
-    stripState.velocity.value = velocity;
-    notifyListeners(); // Notifica mudanças na velocidade
-  }
-
-  void setEffect(String effect, String espId) {
-    mqttService.publishMessage(espId, effect);
-    stripState.isSolid = effect.contains("SOLID");
-    notifyListeners(); // Notifica mudanças no efeito
-  }
+  // =========================================================
+  // COMMANDS
+  // =========================================================
 
   void powerOn(String espId) {
-    mqttService.publishMessage(espId, "ON");
-    stripState.isOn.value = true;
-    notifyListeners(); // Notifica quando o power estiver ligado
+    mqttService.publishMessage(
+      espId,
+      "LED_ON",
+    );
   }
 
   void powerOff(String espId) {
-    mqttService.publishMessage(espId, "OFF");
-    stripState.isOn.value = false;
-    notifyListeners(); // Notifica quando o power estiver desligado
+    mqttService.publishMessage(
+      espId,
+      "LED_OFF",
+    );
+  }
+
+  void setSolid(String espId) {
+    mqttService.publishMessage(
+      espId,
+      "LED_SOLID",
+    );
+  }
+
+  void setFade(String espId) {
+    mqttService.publishMessage(
+      espId,
+      "LED_FADE",
+    );
+  }
+
+  void setRainbow(String espId) {
+    mqttService.publishMessage(
+      espId,
+      "LED_RAINBOW",
+    );
+  }
+
+  void setColor(
+    int red,
+    int green,
+    int blue,
+    String espId,
+  ) {
+    mqttService.publishMessage(
+      espId,
+      "LED_COLOR:$red,$green,$blue",
+    );
+  }
+
+  void setBrightness(
+    int brightness,
+    String espId,
+  ) {
+    mqttService.publishMessage(
+      espId,
+      "LED_BRIGHTNESS:$brightness",
+    );
+  }
+
+  void setVelocity(
+    int velocity,
+    String espId,
+  ) {
+    mqttService.publishMessage(
+      espId,
+      "LED_VELOCITY:$velocity",
+    );
   }
 
   void getState(String espId) {
-    mqttService.publishMessage(espId, "state");
+    mqttService.publishMessage(
+      espId,
+      "LED_STATE",
+    );
   }
 
-  StripStateModel parseStripState(String input) {
-
-    RegExp regExp = RegExp(
-        r"State: (\w+), Color: R:(\d+) G:(\d+) B:(\d+), Brightness: (\d+), Velocity: (\d+), Effect: (\w+)");
-    RegExpMatch? match = regExp.firstMatch(input);
-
-    if (match != null) {
-      bool isOn = match.group(1)! == "ON";
-      int red = int.parse(match.group(2)!);
-      int green = int.parse(match.group(3)!);
-      int blue = int.parse(match.group(4)!);
-      int brightness = int.parse(match.group(5)!);
-      int velocity = int.parse(match.group(6)!);
-      bool isSolid = match.group(7)! == "SOLID_COLOR";
-
-      return StripStateModel(
-        red: red,
-        green: green,
-        blue: blue,
-        brightness: brightness,
-        velocity: velocity,
-        isSolid: isSolid,
-        isOn: isOn,
-      );
-    } else {
-      throw FormatException("String no formato inválido");
-    }
-  }
+  // =========================================================
+  // MQTT CALLBACK
+  // =========================================================
 
   void mqttCallback(String message) {
 
-    if (message.contains("State")) {
-      stripState = parseStripState(message);
-      notifyListeners(); // Notifica mudanças no estado
-    }
-
-    if (message.contains("OFF")) {
-      stripState.isOn.value = false;
-      notifyListeners(); // Notifica quando o power for desligado
-    }
-
-    if (message.contains("ON")) {
+    // -------------------------
+    // LED_ON:255
+    // -------------------------
+    if (message.startsWith("LED_ON")) {
       stripState.isOn.value = true;
-      notifyListeners(); // Notifica quando o power for ligado
+
+      final parts = message.split(":");
+
+      if (parts.length > 1) {
+        stripState.brightness.value =
+            int.tryParse(parts[1]) ?? 255;
+      }
+
+      notifyListeners();
+      return;
     }
 
-    if (message.contains("Brightness set")) {
-      RegExp regExp = RegExp(r"to (\d+)");
-      RegExpMatch? match = regExp.firstMatch(message);
-      if (match != null) {
-        stripState.brightness.value = int.parse(match.group(1)!);
-        notifyListeners(); // Notifica mudanças no brilho
-      }
+    // -------------------------
+    // LED_OFF:0
+    // -------------------------
+    if (message.startsWith("LED_OFF")) {
+      stripState.isOn.value = false;
+      stripState.brightness.value = 0;
+
+      notifyListeners();
+      return;
     }
 
-    if (message.contains("Velocity set")) {
-      RegExp regExp = RegExp(r"to (\d+)");
-      RegExpMatch? match = regExp.firstMatch(message);
-      if (match != null) {
-        stripState.velocity.value = int.parse(match.group(1)!);
-        notifyListeners(); // Notifica mudanças na velocidade
+    // -------------------------
+    // LED_SOLID
+    // -------------------------
+    if (message == "LED_SOLID") {
+      stripState.isSolid = true;
+      notifyListeners();
+      return;
+    }
+
+    // -------------------------
+    // LED_FADE
+    // -------------------------
+    if (message == "LED_FADE") {
+      stripState.isSolid = false;
+      notifyListeners();
+      return;
+    }
+
+    // -------------------------
+    // LED_RAINBOW
+    // -------------------------
+    if (message == "LED_RAINBOW") {
+      stripState.isSolid = false;
+      notifyListeners();
+      return;
+    }
+
+    // -------------------------
+    // LED_COLOR:r,g,b
+    // -------------------------
+    if (message.startsWith("LED_COLOR:")) {
+
+      final raw =
+          message.replaceFirst("LED_COLOR:", "");
+
+      final rgb = raw.split(",");
+
+      if (rgb.length == 3) {
+
+        stripState.red.value =
+            int.tryParse(rgb[0]) ?? 0;
+
+        stripState.green.value =
+            int.tryParse(rgb[1]) ?? 0;
+
+        stripState.blue.value =
+            int.tryParse(rgb[2]) ?? 0;
+
+        notifyListeners();
       }
+
+      return;
+    }
+
+    // -------------------------
+    // LED_BRIGHTNESS:x
+    // -------------------------
+    if (message.startsWith("LED_BRIGHTNESS:")) {
+
+      final raw =
+          message.replaceFirst(
+              "LED_BRIGHTNESS:",
+              "");
+
+      stripState.brightness.value =
+          int.tryParse(raw) ?? 0;
+
+      stripState.isOn.value =
+          stripState.brightness.value > 0;
+
+      notifyListeners();
+      return;
+    }
+
+    // -------------------------
+    // LED_VELOCITY:x
+    // -------------------------
+    if (message.startsWith("LED_VELOCITY:")) {
+
+      final raw =
+          message.replaceFirst(
+              "LED_VELOCITY:",
+              "");
+
+      stripState.velocity.value =
+          int.tryParse(raw) ?? 0;
+
+      notifyListeners();
+      return;
+    }
+
+    // -------------------------
+    // FULL STATE
+    // LED_STATE:ON,R:255,G:0,B:0,BRT:100,VEL:50
+    // -------------------------
+    if (message.startsWith("LED_STATE:")) {
+
+      final raw =
+          message.replaceFirst("LED_STATE:", "");
+
+      final parts = raw.split(",");
+
+      for (final part in parts) {
+
+        if (part == "ON") {
+          stripState.isOn.value = true;
+        }
+
+        if (part == "OFF") {
+          stripState.isOn.value = false;
+        }
+
+        if (part.startsWith("R:")) {
+          stripState.red.value =
+              int.tryParse(
+                part.replaceFirst("R:", ""),
+              ) ??
+              0;
+        }
+
+        if (part.startsWith("G:")) {
+          stripState.green.value =
+              int.tryParse(
+                part.replaceFirst("G:", ""),
+              ) ??
+              0;
+        }
+
+        if (part.startsWith("B:")) {
+          stripState.blue.value =
+              int.tryParse(
+                part.replaceFirst("B:", ""),
+              ) ??
+              0;
+        }
+
+        if (part.startsWith("BRT:")) {
+          stripState.brightness.value =
+              int.tryParse(
+                part.replaceFirst("BRT:", ""),
+              ) ??
+              0;
+        }
+
+        if (part.startsWith("VEL:")) {
+          stripState.velocity.value =
+              int.tryParse(
+                part.replaceFirst("VEL:", ""),
+              ) ??
+              0;
+        }
+      }
+
+      notifyListeners();
     }
   }
 
-  void registerCallback(String espId)
-  {
-    mqttService.subscribeToTopic(espId, mqttCallback);
-    
-  }
+  // =========================================================
+  // MQTT REGISTER
+  // =========================================================
 
-  void subscribeToTopic(String espId) {
-    mqttService.subscribeToTopic(espId, mqttCallback);
+  void registerCallback(String espId) {
+    mqttService.subscribeToTopic(
+      espId,
+      mqttCallback,
+    );
   }
 }

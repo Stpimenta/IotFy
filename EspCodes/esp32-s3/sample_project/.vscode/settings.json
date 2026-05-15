@@ -1,0 +1,19 @@
+{
+  "idf.flashType": "UART",
+  "idf.port": "/dev/ttyACM0",
+  "idf.currentSetup": "/home/stpimenta/esp/esp-idf",
+  "idf.openOcdConfigs": [
+    "board/esp32c3-builtin.cfg"
+  ],
+  "idf.customExtraVars": {
+    "OPENOCD_USB_ADAPTER_LOCATION": "3-3",
+    "IDF_TARGET": "esp32c3"
+  },
+  "clangd.path": "/home/stpimenta/.espressif/tools/esp-clang/esp-18.1.2_20240912/esp-clang/bin/clangd",
+  "clangd.arguments": [
+    "--background-index",
+    "--query-driver=**",
+    "--compile-commands-dir=/home/stpimenta/Desktop/Projects/IotFy/EspCodes/esp32-s3/sample_project/build"
+  ],
+  "C_Cpp.errorSquiggles": "disabled"
+}

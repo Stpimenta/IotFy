@@ -27,6 +27,10 @@ void mqtt_protocols::connect() {
         
         std::string subTopic = _espId + "/reciver";  
         clientMqtt.subscribe(subTopic.c_str());
+        Serial.println("connected"); 
+        Serial.println(_espId.c_str()); 
+
+        
     } 
 
     else
